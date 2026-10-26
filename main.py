@@ -13,34 +13,6 @@ project_budget = 1000
 project_cost = 250
 remaining_budget = project_budget - project_cost
 
-part_prices = [250, 180, 300]
-
-parts = [
-  {
-    "name": "Suspension components",
-    "price": 250,
-    "category": "Suspension",
-    "status": "Planned"
-  },
-  {
-    "name": "Tyres",
-    "price": 180,
-    "category": "Tyres",
-    "status": "Planned"
-  },
-  {
-    "name": "Exhaust components",
-    "price": 300,
-    "category": "Exhaust",
-    "status": "Researching"
-  },
-  {
-    "name": "Brake components",
-    "price": 120,
-    "category": "Brake",
-    "status": "Planned"
-  }
-]
 
 def calculate_total_cost(parts):
     return  sum(part["price"] for part in parts )
@@ -57,19 +29,19 @@ def display_parts(parts):
             f'{ part["status"] }'
         )
 
-def add_part(part):
+def add_part(parts, part):
     return parts.append(part)
 
 
-def save_part(parts):
+def save_parts(parts):
     with open("parts.json", "w") as file:
         json.dump(parts, file)
 
 
-def load_part():
+def load_parts():
     with open("parts.json", "r") as file:
-        list_parts = json.load(file)
-    return list_parts
+        parts = json.load(file)
+    return parts
 
 
 print("Car:", car_brand, car_model)
@@ -89,25 +61,27 @@ print("Project cost:", project_cost, "EUR")
 print("Remaining budget:", remaining_budget, "EUR")
 
 new_part= {
-    "name": "Air filter",
-    "price": 25,
-    "category": "Engine",
+    "name": "Sport steering wheel ",
+    "price": 40,
+    "category": "Body",
     "status": "Planned"
 
 }
 
-add_part(new_part)
+parts = load_parts()
 
-save_part(parts)
+add_part(parts, new_part)
 
-new_parts = load_part()
+save_parts(parts)
+
+new_lists = load_parts()
 
 print()
 print("\n--- Stage 1 Parts ---")
-display_parts(new_parts)
+display_parts(new_lists)
 
 
-total_cost = calculate_total_cost(parts)
+total_cost = calculate_total_cost(new_lists)
 remaining = calculate_remaining_budget(project_budget,total_cost)
 print("Total planned cost:", total_cost, "EUR")
 print("Remaining cost:", remaining, "EUR")
