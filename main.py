@@ -1,3 +1,5 @@
+import json
+
 car_brand = "Opel"
 car_model = "Astra H GTC"
 car_year = 2008
@@ -13,7 +15,7 @@ remaining_budget = project_budget - project_cost
 
 part_prices = [250, 180, 300]
 
-parts = [ 
+parts = [
   {
     "name": "Suspension components",
     "price": 250,
@@ -40,6 +42,35 @@ parts = [
   }
 ]
 
+def calculate_total_cost(parts):
+    return  sum(part["price"] for part in parts )
+
+def calculate_remaining_budget(budget, total_cost):
+    return budget- total_cost
+
+def display_parts(parts):
+    for part in parts:
+        print(
+            f'{ part["name"] } |'
+            f'{ part["price"] } EUR |'
+            f'{ part["category"] } |'
+            f'{ part["status"] }'
+        )
+
+def add_part(part):
+    return parts.append(part)
+
+
+def save_part(parts):
+    with open("parts.json", "w") as file:
+        json.dump(parts, file)
+
+
+def load_part():
+    with open("parts.json", "r") as file:
+        list_parts = json.load(file)
+    return list_parts
+
 
 print("Car:", car_brand, car_model)
 print("Year:", car_year)
@@ -57,31 +88,26 @@ print("Project budget:", project_budget, "EUR")
 print("Project cost:", project_cost, "EUR")
 print("Remaining budget:", remaining_budget, "EUR")
 
+new_part= {
+    "name": "Air filter",
+    "price": 25,
+    "category": "Engine",
+    "status": "Planned"
+
+}
+
+add_part(new_part)
+
+save_part(parts)
+
+new_parts = load_part()
+
 print()
 print("\n--- Stage 1 Parts ---")
-print(part_prices)
-print("First part price:", part_prices[0], "EUR")
-print("Second part prices:", part_prices[1], "EUR")
-print("Third part prices:", part_prices[2], "EUR")
+display_parts(new_parts)
 
-part_prices.append(70)
-print("Updated prices:", part_prices)
 
-print("\n--- Part Suspension Details ---")
-print("Name:", parts[0]["name"])
-print("Price:", parts[0]["price"], "EUR")
-print("Category:", parts[0]["category"])
-print("Status:", parts[0]["status"])
-
-print("\n--- Parts Inventory ---")
-print(parts[0]["name"])
-print(parts[1]["name"])
-print(parts[2]["name"])
-
-total_cost = (
-    parts[0]["price"]
-    + parts[1]["price"]
-    + parts[2]["price"]
-    + parts[3]["price"]
-)
+total_cost = calculate_total_cost(parts)
+remaining = calculate_remaining_budget(project_budget,total_cost)
 print("Total planned cost:", total_cost, "EUR")
+print("Remaining cost:", remaining, "EUR")
